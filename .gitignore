@@ -1,0 +1,7 @@
+/target
+/cache
+/cache-*
+/pdf
+*.pdf
+*.html
+.chrome-profile

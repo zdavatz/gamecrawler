@@ -13,7 +13,7 @@ cargo build --release
 ./target/release/bga_playable ...     # BGA-playable subset only
 ```
 
-`cargo test` runs the (small) unit suite in `src/bgg.rs`.
+There are no unit tests yet. `cargo test` is a no-op.
 
 ## Architecture
 
@@ -24,9 +24,12 @@ A single library crate (`src/lib.rs`) plus four bins (`src/main.rs` and
   `geekitem/linkeditems` for the designer credit list (already includes year,
   rating, rank, image), and `geekitems?objectid=ID&objecttype=thing` for
   player-count / playtime supplements.
-- **`cache.rs`** — filesystem JSON cache. `<root>/list.json`,
-  `<root>/items/<id>.json`, `<root>/dynamic/<id>.json`. Re-runs hit cache;
-  pass `--refresh` to invalidate.
+- **`cache.rs`** — filesystem JSON cache. `<root>/list.json` for the
+  designer credit list; `<root>/items/<id>.json` for per-game player/time
+  supplements. Re-runs hit cache; pass `--refresh` to invalidate. (A
+  `<root>/dynamic/` directory is created but currently unused — leftover
+  from the v1 design that called `api.geekdo.com/api/dynamicinfo` per game
+  before we discovered the inline stats on `linkeditems`.)
 - **`render.rs`** — builds two HTML layouts (`build_html` and
   `build_sectioned_html`) sharing a single `render_card` helper, then prints
   to PDF via `chromiumoxide` (headless Chrome). Card supports an optional

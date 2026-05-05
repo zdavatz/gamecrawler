@@ -5,7 +5,7 @@ Generate PDF catalogs of board games from BoardGameGeek data, with optional
 
 ## What's in the box
 
-Four binaries, all wrapping a shared library:
+Five binaries, all wrapping a shared library:
 
 | Binary | What it does |
 |--------|-------------|
@@ -17,16 +17,22 @@ Four binaries, all wrapping a shared library:
 
 ## Prerequisites
 
-- Rust 1.75+ (`cargo`).
-- Google Chrome / Chromium (any of `/usr/bin/google-chrome-stable`,
-  `/usr/bin/chromium`, `/opt/google/chrome/chrome`, or set `$CHROME`). The
-  PDF rendering pipeline drives headless Chrome via `chromiumoxide`.
-- **FlareSolverr** on `localhost:8191` *only* if you use `popular` or `bga_index`,
-  which fetch Cloudflare-protected pages. One-liner:
-  `docker run -d --name flaresolverr -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:latest`
+- A reasonably recent stable Rust toolchain (the crate uses edition 2021).
+- Google Chrome / Chromium, used for two purposes:
+  1. PDF rendering in every binary (`chromiumoxide` → headless Chrome).
+  2. Catalog scraping in `bga_index` (also `chromiumoxide`).
 
-The designer crawler (`gamecrawler`) does not need FlareSolverr — it talks
-directly to `api.geekdo.com`.
+  Any of `/usr/bin/google-chrome-stable`, `/usr/bin/chromium`,
+  `/opt/google/chrome/chrome` is auto-detected, or set `$CHROME` to point
+  at your binary.
+- **FlareSolverr** on `localhost:8191` *only* if you use the `popular`
+  binary, which fetches Cloudflare-protected BGG browse pages. One-liner:
+  `docker run -d --name flaresolverr -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:latest`.
+  Override the endpoint with `--flaresolverr` or `$FLARESOLVERR_ENDPOINT`.
+
+`gamecrawler`, `top`, `bga_index`, and `bga_playable` do not need
+FlareSolverr — they talk directly to `api.geekdo.com` or to BGA without
+going through the challenge.
 
 ## Quick start
 
